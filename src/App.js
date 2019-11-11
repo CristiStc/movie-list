@@ -1,23 +1,22 @@
 import React from "react";
-import { Layout, Typography, Empty } from "antd";
+import { Layout } from "antd";
 import "antd/dist/antd.css";
 import "./App.css";
+import Header from "./shared/Header/Header";
+import { Home } from "./pages/Home/Home";
 
-const { Header, Content, Footer } = Layout;
-const { Title } = Typography;
+const { Content, Footer } = Layout;
 
-function App() {
+const App = () => {
   return (
-    <Layout>
-      <Header>
-        <Title>Movie List App</Title>
-      </Header>
+    <Layout style={{ minHeight: "100vh" }}>
+      <Header />
       <Content>
-        <Empty />
+        <Home />
       </Content>
       <Footer>Footer</Footer>
     </Layout>
   );
-}
+};
 
 export default App;
