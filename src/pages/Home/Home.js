@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { Row, Col, Input, Button } from "antd";
+import axios from "axios";
 
+import settings from "../../config";
 export class Home extends Component {
   state = {
     searchTerm: ""
   };
 
   handleSearchChange = event => {
-    const {
-      target: { value }
-    } = event;
+    const { value } = event.target;
     this.setState({
       searchTerm: value
     });
@@ -17,6 +17,13 @@ export class Home extends Component {
 
   handleSearchClick = () => {
     console.log(this.state.searchTerm);
+
+    const url = `
+    https://api.themoviedb.org/3/search/movie?api_key=${settings.APIKEY}&query=${this.state.searchTerm}`;
+
+    axios.get(url).then(res => {
+      console.log(res.data);
+    });
   };
   render = () => {
     return (
