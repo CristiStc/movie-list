@@ -8,5 +8,9 @@ h1.ant-typography {
 
 .result_poster img {
   max-width: 100%;
-  min-height: 100px;
+  height: 90px;
+}
+
+.movie-list {
+  display: flex;
 }
