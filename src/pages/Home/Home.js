@@ -3,38 +3,23 @@ import { Row, Col, Input, Button } from "antd";
 import axios from "axios";
 
 import settings from "../../config";
+import ResultList from "./ResultList/ResultList";
+import MovieList from "./MovieList/MovieList";
 
-const IMAGE_PATH = "https://image.tmdb.org/t/p/w200/";
-const ResultList = props => {
-  const { results } = props;
-  return results.map(item => {
-    return (
-      <Row key={item.id} gutter={8} className="result_item">
-        <Col span={4} className="result_poster">
-          <img
-            src={IMAGE_PATH + item.poster_path}
-            alt={`Poster of ${item.title}`}
-          />
-        </Col>
-        <Col span={12}>
-          <span>{item.title} </span>
-        </Col>
-        <Col span={4}>
-          <span>{item.vote_average} </span>
-        </Col>
-        <Col span={4}>
-          <span>{item.release_date} </span>
-        </Col>
-      </Row>
-    );
-  });
-};
 export class Home extends Component {
   state = {
     searchTerm: "",
     results: [],
+    savedMovies: [],
     isLoading: false
   };
+
+  componentDidMount() {
+    const savedMovies = JSON.parse(localStorage.getItem("saved-movies"));
+    this.setState({ savedMovies }, () => {
+      console.log(this.state.savedMovies);
+    });
+  }
 
   handleSearchChange = event => {
     const { value } = event.target;
@@ -48,7 +33,8 @@ export class Home extends Component {
     });
   };
 
-  handleSearchClick = async () => {
+  handleSearchClick = async event => {
+    event.preventDefault();
     console.log(this.state.searchTerm);
 
     const url = `
@@ -69,35 +55,59 @@ export class Home extends Component {
       console.log(res.data);
     });
   };
+
+  handleAddMovie = movie => {
+    const { savedMovies } = this.state;
+    savedMovies.push(movie);
+    this.setState({ savedMovies, results: [] });
+    localStorage.setItem(
+      "saved-movies",
+      JSON.stringify(this.state.savedMovies)
+    );
+  };
+
   render = () => {
     const { searchTerm, isLoading } = this.state;
     return (
       <Fragment>
         <Row>
-          <Col span={8} offset={6}>
-            <Input
-              placeholder="Search for a movie"
-              value={searchTerm}
-              onChange={this.handleSearchChange}
-              onPressEnter={this.handleSearchChange}
-              allowClear
+          <form onSubmit={this.handleSearchClick}>
+            <Col span={8} offset={6}>
+              <Input
+                placeholder="Search for a movie"
+                value={searchTerm}
+                onChange={this.handleSearchChange}
+                onPressEnter={this.handleSearchChange}
+                allowClear
+              />
+            </Col>
+            <Col span={2}>
+              <Button
+                loading={isLoading}
+                disabled={searchTerm.length < 2}
+                type="primary"
+                icon="search"
+                onClick={this.handleSearchClick}
+              >
+                Search
+              </Button>
+            </Col>
+          </form>
+        </Row>
+
+        <Row>
+          <Col span={10} offset={6}>
+            <ResultList
+              results={this.state.results}
+              onAddMovie={this.handleAddMovie}
             />
-          </Col>
-          <Col span={2}>
-            <Button
-              loading={isLoading}
-              disabled={searchTerm.length < 2}
-              type="primary"
-              icon="search"
-              onClick={this.handleSearchClick}
-            >
-              Search
-            </Button>
           </Col>
         </Row>
         <Row>
-          <Col span={10} offset={6}>
-            <ResultList results={this.state.results} />
+          <Col span={20} offset={2} className="movie-list">
+            {this.state.savedMovies.length > 0 && (
+              <MovieList movies={this.state.savedMovies} />
+            )}
           </Col>
         </Row>
       </Fragment>
