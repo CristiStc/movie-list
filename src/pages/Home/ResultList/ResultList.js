@@ -4,7 +4,7 @@ import { Row, Col, Button, Icon } from "antd";
 const IMAGE_PATH = "https://image.tmdb.org/t/p/w200/";
 
 const ResultList = props => {
-  const { results, onAddMovie } = props;
+  const { savedMovies, results, onAddMovie } = props;
   return results.map(item => {
     return (
       <Row key={item.id} gutter={8} className="result_item">
@@ -21,13 +21,19 @@ const ResultList = props => {
           <span>{item.vote_average}</span>
         </Col>
         <Col span={3}>
-          <span>{item.release_date}</span>
+          <span>{item.release_date.slice(0, 4)}</span>
         </Col>
-        <Col span={2} offset={1} className="result_add">
-          <Button type="primary" ghost onClick={() => onAddMovie(item)}>
-            <Icon type="plus" />
-            Save
-          </Button>
+        <Col span={4} className="result_add">
+          {savedMovies.filter(movie => movie.id === item.id).length ? (
+            <Button type="secondary" block ghost disabled>
+              Saved
+            </Button>
+          ) : (
+            <Button type="primary" block ghost onClick={() => onAddMovie(item)}>
+              <Icon type="plus" />
+              Save
+            </Button>
+          )}
         </Col>
       </Row>
     );

@@ -16,9 +16,11 @@ export class Home extends Component {
 
   componentDidMount() {
     const savedMovies = JSON.parse(localStorage.getItem("saved-movies"));
-    this.setState({ savedMovies }, () => {
-      console.log(this.state.savedMovies);
-    });
+    if (savedMovies) {
+      this.setState({ savedMovies }, () => {
+        console.log(this.state.savedMovies);
+      });
+    }
   }
 
   handleSearchChange = event => {
@@ -66,6 +68,14 @@ export class Home extends Component {
     );
   };
 
+  handleRemoveMovie = movieId => {
+    const savedMovies = this.state.savedMovies.filter(
+      item => item.id !== movieId
+    );
+    localStorage.setItem("saved-movies", JSON.stringify(savedMovies));
+    this.setState({ savedMovies });
+  };
+
   render = () => {
     const { searchTerm, isLoading } = this.state;
     return (
@@ -84,6 +94,7 @@ export class Home extends Component {
             <Col span={2}>
               <Button
                 loading={isLoading}
+                block
                 disabled={searchTerm.length < 2}
                 type="primary"
                 icon="search"
@@ -96,17 +107,21 @@ export class Home extends Component {
         </Row>
 
         <Row>
-          <Col span={10} offset={6}>
+          <Col span={10} offset={6} className="result_container">
             <ResultList
+              savedMovies={this.state.savedMovies}
               results={this.state.results}
               onAddMovie={this.handleAddMovie}
             />
           </Col>
         </Row>
         <Row>
-          <Col span={20} offset={2} className="movie-list">
+          <Col span={20} offset={2} className="movie_list">
             {this.state.savedMovies.length > 0 && (
-              <MovieList movies={this.state.savedMovies} />
+              <MovieList
+                movies={this.state.savedMovies}
+                onRemoveMovie={this.handleRemoveMovie}
+              />
             )}
           </Col>
         </Row>

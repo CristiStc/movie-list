@@ -4,6 +4,8 @@ h1.ant-typography {
 
 .result_item {
   margin: 5px 0;
+  display: flex;
+  align-items: center;
 }
 
 .result_poster img {
@@ -11,6 +13,25 @@ h1.ant-typography {
   height: 90px;
 }
 
-.movie-list {
+.movie_list {
   display: flex;
+  flex-wrap: wrap;
+}
+
+.movie_list .ant-card {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+
+.movie_list .ant-card .ant-card-body {
+  flex: 1 1 100%;
+}
+
+.result_container {
+  position: absolute;
+  background: white;
+  z-index: 1;
+  padding: 0 10px;
 }
