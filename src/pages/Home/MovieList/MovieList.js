@@ -1,23 +1,26 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Button } from "antd";
 const IMAGE_PATH = "https://image.tmdb.org/t/p/w200/";
 
 const { Meta } = Card;
 
 const MovieList = props => {
-  const { movies } = props;
+  const { movies, onRemoveMovie } = props;
   return movies.map(movie => {
     return (
       <Card
         key={movie.id}
-        hoverable
-        style={{ width: 240 }}
         cover={
           <img
             src={IMAGE_PATH + movie.poster_path}
             alt={`Poster of ${movie.title}`}
           />
         }
+        actions={[
+          <Button type="danger" onClick={() => onRemoveMovie(movie.id)}>
+            Remove
+          </Button>
+        ]}
       >
         <Meta title={movie.title} description={movie.overview} />
       </Card>

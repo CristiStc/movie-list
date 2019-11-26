@@ -68,6 +68,14 @@ export class Home extends Component {
     );
   };
 
+  handleRemoveMovie = movieId => {
+    const savedMovies = this.state.savedMovies.filter(
+      item => item.id !== movieId
+    );
+    localStorage.setItem("saved-movies", JSON.stringify(savedMovies));
+    this.setState({ savedMovies });
+  };
+
   render = () => {
     const { searchTerm, isLoading } = this.state;
     return (
@@ -108,9 +116,12 @@ export class Home extends Component {
           </Col>
         </Row>
         <Row>
-          <Col span={20} offset={2} className="movie-list">
+          <Col span={20} offset={2} className="movie_list">
             {this.state.savedMovies.length > 0 && (
-              <MovieList movies={this.state.savedMovies} />
+              <MovieList
+                movies={this.state.savedMovies}
+                onRemoveMovie={this.handleRemoveMovie}
+              />
             )}
           </Col>
         </Row>

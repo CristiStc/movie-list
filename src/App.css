@@ -13,8 +13,20 @@ h1.ant-typography {
   height: 90px;
 }
 
-.movie-list {
+.movie_list {
   display: flex;
+  flex-wrap: wrap;
+}
+
+.movie_list .ant-card {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+
+.movie_list .ant-card .ant-card-body {
+  flex: 1 1 100%;
 }
 
 .result_container {
