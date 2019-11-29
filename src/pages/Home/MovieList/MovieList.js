@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button } from "antd";
+import { Card, Button, Icon } from "antd";
 const IMAGE_PATH = "https://image.tmdb.org/t/p/w200/";
 
 const { Meta } = Card;
@@ -17,7 +17,12 @@ const MovieList = props => {
           />
         }
         actions={[
-          <Button type="danger" onClick={() => onRemoveMovie(movie.id)}>
+          <Button
+            key="delete"
+            type="danger"
+            onClick={() => onRemoveMovie(movie.id)}
+          >
+            <Icon type="delete" theme="filled" />
             Remove
           </Button>
         ]}
