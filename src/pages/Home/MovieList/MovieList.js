@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Card, Button, Icon } from "antd";
 const IMAGE_PATH = "https://image.tmdb.org/t/p/w200/";
 
@@ -27,7 +27,17 @@ const MovieList = props => {
           </Button>
         ]}
       >
-        <Meta title={movie.title} description={movie.overview} />
+        <Meta
+          title={movie.title}
+          description={
+            <Fragment>
+              <div style={{ fontSize: 13, marginBottom: 15, color: "#000000" }}>
+                {movie.genres}
+              </div>
+              <div>{movie.overview}</div>
+            </Fragment>
+          }
+        />
       </Card>
     );
   });
