@@ -24,8 +24,13 @@ const ResultList = props => {
           <span>{item.release_date.slice(0, 4)}</span>
         </Col>
         <Col span={4} className="result_add">
-          {savedMovies.filter(movie => movie.id === item.id).length ? (
+          {savedMovies.some(movie => movie.id === item.id) ? (
             <Button type="secondary" block ghost disabled>
+              <Icon
+                type="check-circle"
+                theme="twoTone"
+                twoToneColor="#52c41a"
+              />{" "}
               Saved
             </Button>
           ) : (

@@ -61,19 +61,26 @@ export class Home extends Component {
   handleAddMovie = movie => {
     const { savedMovies } = this.state;
     savedMovies.push(movie);
-    this.setState({ savedMovies, results: [] });
-    localStorage.setItem(
-      "saved-movies",
-      JSON.stringify(this.state.savedMovies)
-    );
+
+    this.setState({ savedMovies, results: [], searchTerm: "" }, () => {
+      localStorage.setItem(
+        "saved-movies",
+        JSON.stringify(this.state.savedMovies)
+      );
+    });
   };
 
   handleRemoveMovie = movieId => {
     const savedMovies = this.state.savedMovies.filter(
       item => item.id !== movieId
     );
-    localStorage.setItem("saved-movies", JSON.stringify(savedMovies));
-    this.setState({ savedMovies });
+
+    this.setState({ savedMovies }, () => {
+      localStorage.setItem(
+        "saved-movies",
+        JSON.stringify(this.state.savedMovies)
+      );
+    });
   };
 
   render = () => {
