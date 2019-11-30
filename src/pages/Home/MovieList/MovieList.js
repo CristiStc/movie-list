@@ -5,7 +5,7 @@ const IMAGE_PATH = "https://image.tmdb.org/t/p/w200/";
 const { Meta } = Card;
 
 const MovieList = props => {
-  const { movies, onRemoveMovie } = props;
+  const { movies, onRemoveMovie, onRatingChange } = props;
   return movies.map(movie => {
     return (
       <Card
@@ -31,10 +31,24 @@ const MovieList = props => {
           title={movie.title}
           description={
             <Fragment>
-              <div style={{ fontSize: 13, marginBottom: 15, color: "#000000" }}>
-                {movie.genres}
+              <div className="movie_genres">{movie.genres}</div>
+              <div className="movie_votes">
+                {movie.vote_average}
+                <div className="movie_rating">
+                  {[...Array(10)].map((item, i) => (
+                    <Icon
+                      key={i}
+                      type="star"
+                      theme={movie.rating && movie.rating > i && "filled"}
+                      onClick={() => onRatingChange(movie.id, i)}
+                    />
+                  ))}
+                  {movie.rating && (
+                    <span className="movie_rating_value">{movie.rating}</span>
+                  )}
+                </div>
               </div>
-              <div>{movie.overview}</div>
+              <div className="movie_description">{movie.overview}</div>
             </Fragment>
           }
         />
