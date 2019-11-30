@@ -75,7 +75,8 @@ export class Home extends Component {
       .join(", ");
 
     // every time a movie is added to our list, add another key to the movie object that contains the movieGenre string
-    savedMovies.push({ ...movie, genres: movieGenres });
+    // and the rating key that is null at first
+    savedMovies.push({ ...movie, genres: movieGenres, rating: null });
 
     // Alternative method but different logic
     // (here we loop trough the genre array and find matching ids, instead of looping trought movie.genre_ids)
@@ -104,6 +105,24 @@ export class Home extends Component {
       item => item.id !== movieId
     );
 
+    this.setState({ savedMovies }, () => {
+      localStorage.setItem(
+        "saved-movies",
+        JSON.stringify(this.state.savedMovies)
+      );
+    });
+  };
+
+  handleRatingChange = (movieId, i) => {
+    // map through savedMovies and search for the movie by comparing the ids
+    // then change the rating value of the movie to (index + 1) of the icon that was clicked
+    const savedMovies = this.state.savedMovies.map(item => {
+      if (item.id === movieId) {
+        item.rating = i + 1;
+      }
+      return item;
+    });
+    // update the state and then the localStorage
     this.setState({ savedMovies }, () => {
       localStorage.setItem(
         "saved-movies",
@@ -157,6 +176,7 @@ export class Home extends Component {
               <MovieList
                 movies={this.state.savedMovies}
                 onRemoveMovie={this.handleRemoveMovie}
+                onRatingChange={this.handleRatingChange}
               />
             )}
           </Col>
