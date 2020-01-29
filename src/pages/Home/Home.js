@@ -16,7 +16,6 @@ export class Home extends Component {
   };
 
   componentDidMount() {
-    // Save the genres to state on mount to use in the app later
     const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${settings.APIKEY}&language=en-US`;
     this.setState({ isLoading: true });
     axios.get(url).then(res => {
@@ -50,15 +49,6 @@ export class Home extends Component {
     const url = `
     https://api.themoviedb.org/3/search/movie?api_key=${settings.APIKEY}&query=${this.state.searchTerm}`;
 
-    // Async/Await example
-    // let response = null;
-    // try {
-    //   response = await axios.get(url);
-    // } catch (e) {
-    //   console.log(e);
-    // }
-    // console.log(res.data);
-
     this.setState({ isLoading: true });
     axios.get(url).then(res => {
       this.setState({ results: res.data.results, isLoading: false });
@@ -69,28 +59,11 @@ export class Home extends Component {
   handleAddMovie = movie => {
     const { savedMovies, genres } = this.state;
 
-    // Get the genre name for each genre id of the movie and put them into a string
     const movieGenres = movie.genre_ids
       .map(genre => genres.find(item => item.id === genre).name)
       .join(", ");
 
-    // every time a movie is added to our list, add another key to the movie object that contains the movieGenre string
-    // and the rating key that is null at first
     savedMovies.push({ ...movie, genres: movieGenres, rating: null });
-
-    // Alternative method but different logic
-    // (here we loop trough the genre array and find matching ids, instead of looping trought movie.genre_ids)
-    //
-    // const getMovieGenres = () => {
-    //   const movieGenres = [];
-    //   genres.forEach(genre => {
-    //     if (movie.genre_ids.indexOf(genre.id) >= 0) {
-    //       movieGenres.push(genre.name);
-    //     }
-    //   });
-    //   return movieGenres.join(", ");
-    // };
-    // savedMovies.push({ ...movie, genres: getMovieGenres() });
 
     this.setState({ savedMovies, results: [], searchTerm: "" }, () => {
       localStorage.setItem(
@@ -114,15 +87,13 @@ export class Home extends Component {
   };
 
   handleRatingChange = (movieId, i) => {
-    // map through savedMovies and search for the movie by comparing the ids
-    // then change the rating value of the movie to (index + 1) of the icon that was clicked
     const savedMovies = this.state.savedMovies.map(item => {
       if (item.id === movieId) {
         item.rating = i + 1;
       }
       return item;
     });
-    // update the state and then the localStorage
+
     this.setState({ savedMovies }, () => {
       localStorage.setItem(
         "saved-movies",
